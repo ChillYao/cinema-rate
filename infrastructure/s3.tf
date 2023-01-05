@@ -4,17 +4,17 @@ resource "aws_s3_bucket" "cinema_app_s3_bucket" {
   tags = local.common_tags
 }
 
-resource "aws_s3_bucket_acl" "name" {
+resource "aws_s3_bucket_acl" "cinema_app_bucket_acl" {
   bucket = aws_s3_bucket.cinema_app_s3_bucket.id
   acl    = "private"
 }
 
 resource "aws_s3_bucket_public_access_block" "public_block" {
-  bucket                   = aws_s3_bucket.cinema_app_s3_bucket.id
-  block_public_acls        = true
-  blockblock_public_policy = true
-  restrict_public_buckets  = true
-  ignore_public_acl        = true
+  bucket                  = aws_s3_bucket.cinema_app_s3_bucket.id
+  block_public_acls       = true
+  block_public_policy     = true
+  restrict_public_buckets = true
+  ignore_public_acls      = true
 }
 
 resource "aws_s3_bucket_versioning" "cinema_app_s3_bucket_versioning" {
@@ -49,10 +49,10 @@ data "aws_iam_policy_document" "cinema_app_bucket_policy_document" {
       aws_s3_bucket.cinema_app_s3_bucket.arn,
       "${aws_s3_bucket.cinema_app_s3_bucket.arn}/*"
     ]
-  }
 
-  principals {
-    type        = "aws"
-    identifiers = [aws_cloudfront_origin_access_identity.cinema_app_origi_access.aim_arn]
+    principals {
+      type        = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.cinema_app_origin_access.iam_arn]
+    }
   }
 }
