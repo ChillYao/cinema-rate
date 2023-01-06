@@ -65,3 +65,6 @@ infrastracture/*_override.tf.json
 terraform.rc
 
 # End of https://www.toptal.com/developers/gitignore/api/terraform
+infrastructure/.terraform.lock.hcl
+infrastructure/.terraform/terraform.tfstate
+infrastructure/.terraform/providers/registry.terraform.io/hashicorp/aws/4.49.0/darwin_amd64/terraform-provider-aws_v4.49.0_x5
