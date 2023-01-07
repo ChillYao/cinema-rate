@@ -29,6 +29,7 @@ package-lock.json
 
 ### Terraform ###
 # Local .terraform directories
+infrastracture/.terraform/**
 infrastracture/.terraform/*
 infrastracture/.terraform
 
@@ -68,3 +69,4 @@ terraform.rc
 infrastructure/.terraform.lock.hcl
 infrastructure/.terraform/terraform.tfstate
 infrastructure/.terraform/providers/registry.terraform.io/hashicorp/aws/4.49.0/darwin_amd64/terraform-provider-aws_v4.49.0_x5
+infrastructure/.terraform/environment
