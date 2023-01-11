@@ -10,6 +10,7 @@ const Header = () => {
         <div className="header-navbar">
           <div className="header-image">
             <img src={logo} alt="" />
+            Cinema App
           </div>
           <div className="header-menu-toggle" id="header-mobile-menu">
             <span className="bar"></span>
