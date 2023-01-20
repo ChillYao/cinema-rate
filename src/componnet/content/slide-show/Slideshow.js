@@ -1,26 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import './Slideshow.scss';
 
-const Slideshow = () => {
-  const images = [
-    {
-      url: 'https://media.istockphoto.com/id/1395273170/de/foto/frau-zu-hause-w%C3%A4hlt-eine-farbe-um-die-w%C3%A4nde-zu-streichen.jpg?s=2048x2048&w=is&k=20&c=jKHRMdgCGPt_6f3gVZh833MJKZeF_hdZPT-mnFm8b8A='
-    },
-    {
-      url: 'https://media.istockphoto.com/id/1371290125/de/foto/canary-wharf-district-at-night-london-vereinigtes-k%C3%B6nigreich.jpg?s=1024x1024&w=is&k=20&c=_-cYfjrCy6RWurMODg1UejjA7MEgUzOiChCCYnIlBO0='
-    },
-    {
-      url: 'https://media.istockphoto.com/id/1358181814/de/foto/farbmuster-mit-farbe-des-jahres-2022-in-der-hand-very-peri-farbtrendpalette-draufsicht-flache.jpg?s=2048x2048&w=is&k=20&c=UMgAySPu-G5wmZmuoxzAMdvQ16A-P96m7m71ePfBWaw='
-    }
-  ];
-
+const Slideshow = (props) => {
+  const { images, auto, showArrows } = props;
   const [state, setState] = useState({
     slideShow: images[0],
     slideIndex: 0
   });
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [sliderInterval, setSliderInterval] = useState(0);
   const { slideShow, slideIndex } = state;
+  let currentSlideIndex = 0;
+
+  useEffect(() => {
+    if (auto) {
+      const timeInterval = setInterval(() => {
+        autoMoveSlide();
+      }, 10000);
+      setSliderInterval(timeInterval);
+
+      return () => {
+        clearInterval(timeInterval);
+        clearInterval(sliderInterval);
+      };
+    }
+
+    // eslint-disable-next-line
+  }, []);
+
+  const autoMoveSlide = () => {
+    let lastIndex = 0;
+    lastIndex = currentSlideIndex + 1;
+    currentSlideIndex = lastIndex >= images.length ? 0 : lastIndex;
+    setState((prev) => ({
+      ...prev,
+      slideIndex: currentSlideIndex,
+      slideShow: images[currentSlideIndex]
+    }));
+  };
 
   const moveSlideWithArrows = (type) => {
     let index = currentIndex;
@@ -59,7 +78,6 @@ const Slideshow = () => {
   };
 
   const Indicators = (props) => {
-    // eslint-disable-next-line react/prop-types
     const { currentSlide } = props;
     const listIndicators = images.map((slide, i) => {
       const btnClasses = i === currentSlide ? 'slider-navButton slider-navButton--active' : 'slider-navButton';
@@ -77,10 +95,17 @@ const Slideshow = () => {
           )}
         </div>
         <Indicators currentSlide={slideIndex} />
-        <RenderArrows />
+        {showArrows ? <RenderArrows /> : null}
       </div>
     </>
   );
+};
+
+Slideshow.propTypes = {
+  images: PropTypes.array.isRequired,
+  auto: PropTypes.bool.isRequired,
+  showArrows: PropTypes.bool.isRequired,
+  currentSlide: PropTypes.number
 };
 
 export default Slideshow;
