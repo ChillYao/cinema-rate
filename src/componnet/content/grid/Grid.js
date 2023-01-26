@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import './Grid.scss';
+import Rating from '../rating/Rating';
 
 const Grid = (props) => {
   const { images } = props;
@@ -8,6 +9,7 @@ const Grid = (props) => {
     <>
       <div className="grid">
         {images.map((image, i) => {
+          console.log(image);
           return (
             <div key={i}>
               <div className="grid-cell" style={{ backgroundImage: `url(${image.url})` }}>
@@ -17,7 +19,8 @@ const Grid = (props) => {
                 <div className="grid-detail">
                   <span className="grid-detail-title">Mission Impossible</span>
                   <div className="grid-detail-rating">
-                    StarStarStar &nbsp;&nbsp;
+                    <Rating rating={image.rating} totalStars={10} />
+                    &nbsp;&nbsp;
                     <div className="grid-vote-average">{image.rating}</div>
                   </div>
                 </div>
