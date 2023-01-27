@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Header.scss';
 import logo from '../../assets/cinema-logo.svg';
+import { API_URL } from '../../services/movies.service';
 
 const HEADER_LIST = [
   {
@@ -32,6 +33,10 @@ const HEADER_LIST = [
 const Header = () => {
   const [navClass, setNavClass] = useState(false);
   const [menuClass, setMenuClass] = useState(false);
+
+  useEffect(() => {
+    API_URL('now_playing', 1);
+  }, []);
 
   const toggleMenu = () => {
     setMenuClass(!menuClass);
