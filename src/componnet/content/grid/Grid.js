@@ -9,7 +9,6 @@ const Grid = (props) => {
     <>
       <div className="grid">
         {images.map((image, i) => {
-          console.log(image);
           return (
             <div key={i}>
               <div className="grid-cell" style={{ backgroundImage: `url(${image.url})` }}>
