@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+/* eslint-disable react/prop-types */
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import './MainContent.scss';
 import Slideshow from '../slide-show/Slideshow';
 import Paginate from '../paginate/Paginate';
 import Grid from '../grid/Grid';
 
-const MainContent = () => {
+const MainContent = (props) => {
+  const { list } = props;
   const images = [
     {
       url: 'https://media.istockphoto.com/id/1395273170/de/foto/frau-zu-hause-w%C3%A4hlt-eine-farbe-um-die-w%C3%A4nde-zu-streichen.jpg?s=2048x2048&w=is&k=20&c=jKHRMdgCGPt_6f3gVZh833MJKZeF_hdZPT-mnFm8b8A=',
@@ -21,6 +24,18 @@ const MainContent = () => {
   ];
 
   const [currentPage, setCurrentPage] = useState(1);
+  const randomMovies = list.sort(() => Math.random() - Math.random).slice(0, 4);
+
+  useEffect(() => {
+    if (randomMovies.length) {
+      const IMAGES = [
+        {
+          id: 1,
+          url
+        }
+      ];
+    }
+  }, []);
 
   const paginate = (type) => {
     if (type === 'prev' && currentPage > 1) {
@@ -44,4 +59,8 @@ const MainContent = () => {
   );
 };
 
-export default MainContent;
+const mapStateToProps = (state) => ({
+  list: state.movies.list
+});
+
+export default connect(mapStateToProps)(MainContent);

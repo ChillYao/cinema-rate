@@ -1,7 +1,9 @@
-import { MOVIE_LIST } from '../types';
+import { MOVIE_LIST, RESPONSE_PAGE } from '../types';
 
 const initialState = {
-  list: []
+  list: [],
+  page: 1,
+  totalPages: 0
 };
 
 export default (state = initialState, action) => {
@@ -10,6 +12,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         list: action.payload
+      };
+    case RESPONSE_PAGE:
+      return {
+        ...state,
+        page: action.payload.page,
+        totalPages: action.payload.totalPages
       };
     default:
       return state;

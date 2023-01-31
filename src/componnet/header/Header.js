@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import './Header.scss';
 import logo from '../../assets/cinema-logo.svg';
-import { MOVIE_API_URL } from '../../services/movies.service';
-import { Connect } from 'react-redux';
+import { connect } from 'react-redux';
+import { getMovies } from '../../redux/actions/movie';
 
 const HEADER_LIST = [
   {
@@ -31,12 +32,13 @@ const HEADER_LIST = [
   }
 ];
 
-const Header = () => {
+const Header = (props) => {
+  const { getMovies } = props;
   const [navClass, setNavClass] = useState(false);
   const [menuClass, setMenuClass] = useState(false);
 
   useEffect(() => {
-    MOVIE_API_URL('now_playing', 1);
+    getMovies('now_playing', 1);
   }, []);
 
   const toggleMenu = () => {
@@ -87,4 +89,8 @@ const Header = () => {
   );
 };
 
-export default Header;
+const mapStateToProps = (state) => ({
+  list: state.movies.list
+});
+
+export default connect(mapStateToProps, { getMovies })(Header);
