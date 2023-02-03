@@ -33,19 +33,19 @@ const MainContent = (props) => {
       const IMAGES = [
         {
           id: 1,
-          url: `${IMAGE_URL}/${randomMovies[0].backdrop_path}`
+          url: `${IMAGE_URL}${randomMovies[0].backdrop_path}`
         },
         {
           id: 2,
-          url: `${IMAGE_URL}/${randomMovies[1].backdrop_path}`
+          url: `${IMAGE_URL}${randomMovies[1].backdrop_path}`
         },
         {
           id: 3,
-          url: `${IMAGE_URL}/${randomMovies[2].backdrop_path}`
+          url: `${IMAGE_URL}${randomMovies[2].backdrop_path}`
         },
         {
           id: 4,
-          url: `${IMAGE_URL}/${randomMovies[3].backdrop_path}`
+          url: `${IMAGE_URL}${randomMovies[3].backdrop_path}`
         }
       ];
       setImages(IMAGES);
