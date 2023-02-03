@@ -12,7 +12,7 @@ const MainContent = (props) => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [images, setImages] = useState([]);
-  const randomMovies = list.sort(() => Math.random() - Math.random).slice(0, 4);
+  const randomMovies = list.sort(() => Math.random() - Math.random()).slice(0, 4);
 
   useEffect(() => {
     if (randomMovies.length) {
