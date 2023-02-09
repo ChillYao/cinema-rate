@@ -3,9 +3,6 @@ import { MOVIE_API_URL } from '../../services/movies.service';
 
 export const getMovies = (type, pageNumber) => async (dispatch) => {
   try {
-    // const movies = await MOVIE_API_URL(type, pageNumber);
-    // const { results, page, total_pages } = movies.data;
-    // const payload = { page, totalPages: total_pages };
     const response = await getMoviesRequest(type, pageNumber);
     const { results, payload } = response;
     dispatchMethod(MOVIE_LIST, results, dispatch);
@@ -24,6 +21,11 @@ export const loadMoreMovies = (type, pageNumber) => async (dispatch) => {
   } catch (error) {
     dispatchMethod(SET_ERROR, error.response.data.message, dispatch);
   }
+};
+
+export const setResponsePageNumber = (page, totalPages) => async (dispatch) => {
+  const payload = { page, totalPages };
+  dispatchMethod(RESPONSE_PAGE, payload, dispatch);
 };
 
 const dispatchMethod = (type, payload, dispatch) => {

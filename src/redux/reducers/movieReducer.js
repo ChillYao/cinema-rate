@@ -22,7 +22,9 @@ export default (state = initialState, action) => {
     case LOAD_MORE_RESULTS:
       return {
         ...state,
-        list: [...state.list, ...action.payload]
+        list: [...state.list, ...action.payload],
+        page: action.payload.page,
+        totalPages: action.payload.totalPages
       };
     default:
       return state;
