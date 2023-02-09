@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
+import LazyImage from '../../lazy-image/LazyImage';
 
 import './Grid.scss';
 import Rating from '../rating/Rating';
@@ -20,19 +21,32 @@ const Grid = (props) => {
         {movieData.map((data, i) => {
           return (
             <div key={uuidv4()}>
-              <div className="grid-cell" style={{ backgroundImage: `url(${IMAGE_URL}${data.poster_path})` }}>
+              <LazyImage
+                className="grid-cell"
+                src={`${IMAGE_URL}${data.poster_path}`}
+                alt="placeholder"
+              >
                 <div className="grid-read-more">
-                  <button className="grid-cell-button">Read More</button>
+                  <button className="grid-cell-button">
+                    Read More
+                  </button>
                 </div>
                 <div className="grid-detail">
-                  <span className="grid-detail-title">{data.title}</span>
+                  <span className="grid-detail-title">
+                    {data.title}
+                  </span>
                   <div className="grid-detail-rating">
-                    <Rating rating={data.vote_average} totalStars={5} />
+                    <Rating
+                      rating={data.vote_average}
+                      totalStars={5}
+                    />
                     &nbsp;&nbsp;
-                    <div className="grid-vote-average">{data.vote_average}</div>
+                    <div className="grid-vote-average">
+                      {data.vote_average}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </LazyImage>
             </div>
           );
         })}
