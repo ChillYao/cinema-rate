@@ -1,9 +1,15 @@
-import { MOVIE_LIST, RESPONSE_PAGE, LOAD_MORE_RESULTS } from '../types';
+import {
+  MOVIE_LIST,
+  RESPONSE_PAGE,
+  LOAD_MORE_RESULTS,
+  MOVIE_TYPE
+} from '../types';
 
 const initialState = {
   list: [],
   page: 1,
-  totalPages: 0
+  totalPages: 0,
+  movieType: 'Now Playing'
 };
 
 export default (state = initialState, action) => {
@@ -22,9 +28,12 @@ export default (state = initialState, action) => {
     case LOAD_MORE_RESULTS:
       return {
         ...state,
-        list: [...state.list, ...action.payload],
-        page: action.payload.page,
-        totalPages: action.payload.totalPages
+        list: [...state.list, ...action.payload]
+      };
+    case MOVIE_TYPE:
+      return {
+        ...state,
+        movieType: action.payload
       };
     default:
       return state;
