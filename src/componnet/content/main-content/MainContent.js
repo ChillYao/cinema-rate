@@ -7,15 +7,30 @@ import Slideshow from '../slide-show/Slideshow';
 import Paginate from '../paginate/Paginate';
 import Grid from '../grid/Grid';
 import { IMAGE_URL } from '../../../services/movies.service';
+import { setResponsePageNumber, getMovies } from '../../../redux/actions/movie';
 
 const MainContent = (props) => {
-  const { list, movieType } = props;
+  const {
+    list,
+    movieType,
+    totalPages,
+    page,
+    getMovies,
+    setResponsePageNumber
+  } = props;
 
   const [currentPage, setCurrentPage] = useState(1);
   const [images, setImages] = useState([]);
   const randomMovies = list
     .sort(() => Math.random() - Math.random())
     .slice(0, 4);
+
+  const HEADER_TYPE = {
+    now_playing: 'Now Playing',
+    popular: 'Popular',
+    top_rated: 'Top Rated',
+    upcoming: 'Upcoming'
+  };
 
   useEffect(() => {
     if (randomMovies.length) {
@@ -41,23 +56,34 @@ const MainContent = (props) => {
     }
   }, []);
 
+  useEffect(() => {
+    setCurrentPage(page);
+  }, [page, totalPages]);
+
   const paginate = (type) => {
+    let pageNumber = currentPage;
+
     if (type === 'prev' && currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
+      pageNumber -= 1;
+      setCurrentPage(pageNumber);
     } else {
-      setCurrentPage((prevPage) => prevPage + 1);
+      pageNumber += 1;
+      setCurrentPage(pageNumber);
     }
+    setCurrentPage(pageNumber);
+    setResponsePageNumber(pageNumber, totalPages);
+    getMovies(movieType, pageNumber);
   };
 
   return (
     <div className="main-content">
       <Slideshow images={images} auto={true} showArrows={true} />
       <div className="grid-movie-title">
-        <div className="movieType">{movieType}</div>
+        <div className="movieType">{HEADER_TYPE[movieType]}</div>
         <div className="paginate">
           <Paginate
             currentPage={currentPage}
-            totalPages={10}
+            totalPages={totalPages}
             paginate={paginate}
           />
         </div>
@@ -69,12 +95,20 @@ const MainContent = (props) => {
 
 MainContent.propTypes = {
   list: PropTypes.array.isRequired,
-  movieType: PropTypes.string.isRequired
+  movieType: PropTypes.string.isRequired,
+  totalPages: PropTypes.number.isRequired,
+  page: PropTypes.number.isRequired,
+  getMovies: PropTypes.func,
+  setResponsePageNumber: PropTypes.func
 };
 
 const mapStateToProps = (state) => ({
   list: state.movies.list,
-  movieType: state.movies.movieType
+  movieType: state.movies.movieType,
+  totalPages: state.movies.totalPages,
+  page: state.movies.page
 });
 
-export default connect(mapStateToProps)(MainContent);
+export default connect(mapStateToProps, { getMovies, setResponsePageNumber })(
+  MainContent
+);

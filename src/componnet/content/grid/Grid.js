@@ -27,23 +27,14 @@ const Grid = (props) => {
                 alt="placeholder"
               >
                 <div className="grid-read-more">
-                  <button className="grid-cell-button">
-                    Read More
-                  </button>
+                  <button className="grid-cell-button">Read More</button>
                 </div>
                 <div className="grid-detail">
-                  <span className="grid-detail-title">
-                    {data.title}
-                  </span>
+                  <span className="grid-detail-title">{data.title}</span>
                   <div className="grid-detail-rating">
-                    <Rating
-                      rating={data.vote_average}
-                      totalStars={5}
-                    />
+                    <Rating rating={data.vote_average} totalStars={5} />
                     &nbsp;&nbsp;
-                    <div className="grid-vote-average">
-                      {data.vote_average}
-                    </div>
+                    <div className="grid-vote-average">{data.vote_average}</div>
                   </div>
                 </div>
               </LazyImage>
