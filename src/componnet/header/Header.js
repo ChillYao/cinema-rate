@@ -70,7 +70,6 @@ const Header = (props) => {
         <div className="header-navbar">
           <div className="header-image">
             <img src={logo} alt="" />
-            Cinema App
           </div>
           <div
             className={`${
