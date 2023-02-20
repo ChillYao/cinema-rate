@@ -6,7 +6,9 @@ import PropTypes from 'prop-types';
 import {
   getMovies,
   setMovieType,
-  setResponsePageNumber
+  setResponsePageNumber,
+  searchQuery,
+  searchResult
 } from '../../redux/actions/movie';
 
 const HEADER_LIST = [
@@ -37,11 +39,19 @@ const HEADER_LIST = [
 ];
 
 const Header = (props) => {
-  const { getMovies, setMovieType, setResponsePageNumber, page, totalPages } =
-    props;
+  const {
+    getMovies,
+    setMovieType,
+    setResponsePageNumber,
+    page,
+    totalPages,
+    searchQuery,
+    searchResult
+  } = props;
   const [navClass, setNavClass] = useState(false);
   const [menuClass, setMenuClass] = useState(false);
   const [type, setType] = useState('now_playing');
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     getMovies(type, page);
@@ -51,6 +61,12 @@ const Header = (props) => {
   const setMovieTypeUrl = (type) => {
     setType(type);
     setMovieType(type);
+  };
+
+  const onSearchChange = (e) => {
+    setSearch(e.target.value);
+    searchQuery(e.target.value);
+    searchResult(e.target.value);
   };
 
   const toggleMenu = () => {
@@ -70,7 +86,6 @@ const Header = (props) => {
         <div className="header-navbar">
           <div className="header-image">
             <img src={logo} alt="" />
-            Cinema App
           </div>
           <div
             className={`${
@@ -111,6 +126,8 @@ const Header = (props) => {
               className="search-input"
               type="text"
               placeholder="search for a movie"
+              value={search}
+              onChange={onSearchChange}
             />
           </ul>
         </div>
@@ -122,14 +139,14 @@ const Header = (props) => {
 Header.propTypes = {
   getMovies: PropTypes.func,
   setMovieType: PropTypes.func,
+  searchQuery: PropTypes.func,
+  searchResult: PropTypes.func,
   setResponsePageNumber: PropTypes.func,
-  // list: PropTypes.array,
   page: PropTypes.number,
   totalPages: PropTypes.number
 };
 
 const mapStateToProps = (state) => ({
-  // list: state.movies.list,
   page: state.movies.page,
   totalPages: state.movies.totalPages
 });
@@ -137,5 +154,7 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   getMovies,
   setMovieType,
-  setResponsePageNumber
+  setResponsePageNumber,
+  searchQuery,
+  searchResult
 })(Header);
