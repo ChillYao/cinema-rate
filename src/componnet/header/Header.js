@@ -3,7 +3,8 @@ import './Header.scss';
 import logo from '../../assets/cinema-logo.svg';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+// ToDo: import useRouteMatch, rather than useMatch
+import { useNavigate } from 'react-router-dom';
 
 import {
   getMovies,
@@ -40,6 +41,7 @@ const HEADER_LIST = [
   }
 ];
 
+// Todo: the path prop is not needed anymore
 const Header = (props) => {
   const {
     getMovies,
@@ -55,7 +57,10 @@ const Header = (props) => {
   const [type, setType] = useState('now_playing');
   const [search, setSearch] = useState('');
 
-  const history = useHistory();
+  // TODO: replace all the useHistory.push with navigate()
+  const navigate = useNavigate();
+  // const location = useLocation();
+  // TODO: Here replace the useRouteMatch with useMatch
 
   useEffect(() => {
     getMovies(type, page);
@@ -74,7 +79,7 @@ const Header = (props) => {
   };
 
   const navigateToHomeMainPage = () => {
-    history.push('/');
+    navigate('/');
   };
 
   const toggleMenu = () => {
@@ -147,6 +152,7 @@ const Header = (props) => {
   );
 };
 
+// Todo: the path prop is not needed anymore, any replaced by location.pathname
 Header.propTypes = {
   getMovies: PropTypes.func,
   setMovieType: PropTypes.func,
