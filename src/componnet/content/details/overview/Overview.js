@@ -55,7 +55,9 @@ const Overview = () => {
 
     for (let i = 0; i < symbolArray.length; i++) {
       if (number >= symbolArray[i].value) {
-        result = (number / symbolArray[i].value).toFixed(digits).replace(regex, '$1') + symbolArray[i].symbol;
+        result =
+          (number / symbolArray[i].value).toFixed(digits).replace(regex, '$1') +
+          symbolArray[i].symbol;
       }
     }
     return result;

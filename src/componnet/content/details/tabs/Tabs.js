@@ -17,7 +17,14 @@ const Tabs = (props) => {
       <ol className="tab-list">
         {children.map((child) => {
           const { label } = child.props;
-          return <Tab activeTab={activeTab} key={label} label={label} onClick={onClickTabItem} />;
+          return (
+            <Tab
+              activeTab={activeTab}
+              key={label}
+              label={label}
+              onClick={onClickTabItem}
+            />
+          );
         })}
       </ol>
       <div className="tab-content">
