@@ -12,6 +12,7 @@ import {
 } from '../../redux/actions/movie';
 import SearchResult from '../content/seach-result/SearchResult';
 
+// import useLocation and replace match.url and match.path with location.pathname
 const Main = (props) => {
   const {
     loadMoreMovies,

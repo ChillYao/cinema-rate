@@ -3,6 +3,9 @@ import './Header.scss';
 import logo from '../../assets/cinema-logo.svg';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+// ToDo: import useRouteMatch, rather than useMatch
+import { useNavigate } from 'react-router-dom';
+
 import {
   getMovies,
   setMovieType,
@@ -38,6 +41,7 @@ const HEADER_LIST = [
   }
 ];
 
+// Todo: the path prop is not needed anymore
 const Header = (props) => {
   const {
     getMovies,
@@ -52,6 +56,11 @@ const Header = (props) => {
   const [menuClass, setMenuClass] = useState(false);
   const [type, setType] = useState('now_playing');
   const [search, setSearch] = useState('');
+
+  // TODO: replace all the useHistory.push with navigate()
+  const navigate = useNavigate();
+  // const location = useLocation();
+  // TODO: Here replace the useRouteMatch with useMatch
 
   useEffect(() => {
     getMovies(type, page);
@@ -69,6 +78,10 @@ const Header = (props) => {
     searchResult(e.target.value);
   };
 
+  const navigateToHomeMainPage = () => {
+    navigate('/');
+  };
+
   const toggleMenu = () => {
     setMenuClass(!menuClass);
     setNavClass(!navClass);
@@ -84,7 +97,10 @@ const Header = (props) => {
       <div className="header-nav-wrapper">
         <div className="header-bar"></div>
         <div className="header-navbar">
-          <div className="header-image">
+          <div
+            className="header-image"
+            onClick={() => navigateToHomeMainPage()}
+          >
             <img src={logo} alt="" />
           </div>
           <div
@@ -136,6 +152,7 @@ const Header = (props) => {
   );
 };
 
+// Todo: the path prop is not needed anymore, any replaced by location.pathname
 Header.propTypes = {
   getMovies: PropTypes.func,
   setMovieType: PropTypes.func,
