@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { useParams, useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import './Details.scss';
 import Rating from '../rating/Rating';
@@ -7,9 +10,31 @@ import Overview from './overview/Overview';
 import Crew from './crew/Crew';
 import Media from './media/Media';
 import Reviews from './reviews/Reviews';
+import { movieDetails } from '../../../redux/actions/movies';
 // TODO: import useLocation, delelte match, replace match.path and match.url with location.pathname
 
-const Details = () => {
+const Details = (props) => {
+  const { movieDetails, movie, pathURL } = props;
+  const [details, setDetails] = useState();
+  const [loading, setLoading] = useState(false);
+  const { id } = useParams();
+
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
+
+  useEffect(() => {
+    pathURL(location.pathname, location.pathname);
+    if (movie.length === 0) {
+      movieDetails(id);
+    }
+    setDetails(movie[0]);
+    // eslint-disable-next-line
+  }, [id, movie]);
+
   return (
     <>
       <div className="movie-container">
@@ -67,4 +92,14 @@ const Details = () => {
   );
 };
 
-export default Details;
+Details.propTypes = {
+  movie: PropTypes.array,
+  movieDetails: PropTypes.func,
+  pathURL: PropTypes.func
+};
+
+const mapStateToProps = (state) => ({
+  movie: state.movies.movie
+});
+
+export default connect(mapStateToProps, { movieDetails, pathURL })(Details);
