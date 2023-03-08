@@ -45,7 +45,7 @@ export const loadMoreMovies = (type, pageNumber) => async (dispatch) => {
   }
 };
 
-export const movieDetails = (page, id) => async (dispatch) => {
+export const movieDetails = (id) => async (dispatch) => {
   try {
     const details = await MOVIE_DETAILS_URL(id);
     const credits = await MOVIE_CREDITS_URL(id);
@@ -73,6 +73,10 @@ export const searchResult = (query) => async (dispatch) => {
   } catch (error) {
     dispatchMethod(SET_ERROR, error.response.data.message, dispatch);
   }
+};
+
+export const clearMovieDetails = () => async (dispatch) => {
+  dispatchMethod(CLEAR_MOVIE_DETAILS, [], dispatch);
 };
 
 export const setResponsePageNumber = (page, totalPages) => async (dispatch) => {

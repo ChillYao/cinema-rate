@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   getMovies,
   setMovieType,
+  clearMovieDetails,
   setResponsePageNumber,
   searchQuery,
   searchResult
@@ -50,7 +51,8 @@ const Header = (props) => {
     page,
     totalPages,
     searchQuery,
-    searchResult
+    searchResult,
+    clearMovieDetails
   } = props;
   const [navClass, setNavClass] = useState(false);
   const [menuClass, setMenuClass] = useState(false);
@@ -79,6 +81,7 @@ const Header = (props) => {
   };
 
   const navigateToHomeMainPage = () => {
+    clearMovieDetails();
     navigate('/');
   };
 
@@ -158,6 +161,7 @@ Header.propTypes = {
   setMovieType: PropTypes.func,
   searchQuery: PropTypes.func,
   searchResult: PropTypes.func,
+  clearMovieDetails: PropTypes.func,
   setResponsePageNumber: PropTypes.func,
   page: PropTypes.number,
   totalPages: PropTypes.number
@@ -171,6 +175,7 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   getMovies,
   setMovieType,
+  clearMovieDetails,
   setResponsePageNumber,
   searchQuery,
   searchResult
