@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import './Header.scss';
-import logo from '../../assets/cinema-logo.svg';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-// ToDo: import useRouteMatch, rather than useMatch
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, useMatch } from 'react-router-dom';
 
+import './Header.scss';
+import logo from '../../assets/cinema-logo.svg';
 import {
   getMovies,
   setMovieType,
   setResponsePageNumber,
   searchQuery,
-  searchResult
+  searchResult,
+  clearMovieDetails
 } from '../../redux/actions/movie';
+import { pathURL } from '../../redux/actions/routes';
 
 const HEADER_LIST = [
   {
@@ -41,35 +42,55 @@ const HEADER_LIST = [
   }
 ];
 
-// Todo: the path prop is not needed anymore
 const Header = (props) => {
   const {
     getMovies,
     setMovieType,
-    setResponsePageNumber,
     page,
     totalPages,
+    setResponsePageNumber,
     searchQuery,
-    searchResult
+    searchResult,
+    clearMovieDetails
   } = props;
-  const [navClass, setNavClass] = useState(false);
-  const [menuClass, setMenuClass] = useState(false);
+  let [navClass, setNavClass] = useState(false);
+  let [menuClass, setMenuClass] = useState(false);
   const [type, setType] = useState('now_playing');
   const [search, setSearch] = useState('');
+  const [disableSearch, setDisableSearch] = useState(false);
+  const [hideHeader, setHideHeader] = useState(false);
 
-  // TODO: replace all the useHistory.push with navigate()
   const navigate = useNavigate();
-  // const location = useLocation();
-  // TODO: Here replace the useRouteMatch with useMatch
+  const location = useLocation();
+  const detailsRoute = useMatch('/:id/:name/details');
 
   useEffect(() => {
-    getMovies(type, page);
-    setResponsePageNumber(page, totalPages);
-  }, [type]);
+    if (location.pathname) {
+      getMovies(type, page);
+      setResponsePageNumber(page, totalPages);
+      if (detailsRoute || location.pathname === '/') {
+        setHideHeader(true);
+      }
+
+      if (location.pathname !== '/' && location.key) {
+        setDisableSearch(true);
+      }
+    }
+
+    // eslint-disable-next-line
+  }, [type, disableSearch, location]);
 
   const setMovieTypeUrl = (type) => {
-    setType(type);
-    setMovieType(type);
+    setDisableSearch(false);
+    if (location.pathname !== '/') {
+      clearMovieDetails();
+      navigate('/');
+      setType(type);
+      setMovieType(type);
+    } else {
+      setType(type);
+      setMovieType(type);
+    }
   };
 
   const onSearchChange = (e) => {
@@ -78,13 +99,17 @@ const Header = (props) => {
     searchResult(e.target.value);
   };
 
-  const navigateToHomeMainPage = () => {
+  const navigateToMainPage = () => {
+    setDisableSearch(false);
+    clearMovieDetails();
     navigate('/');
   };
 
   const toggleMenu = () => {
-    setMenuClass(!menuClass);
-    setNavClass(!navClass);
+    menuClass = !menuClass;
+    navClass = !navClass;
+    setNavClass(navClass);
+    setMenuClass(menuClass);
     if (navClass) {
       document.body.classList.add('header-nav-open');
     } else {
@@ -94,33 +119,32 @@ const Header = (props) => {
 
   return (
     <>
-      <div className="header-nav-wrapper">
-        <div className="header-bar"></div>
-        <div className="header-navbar">
-          <div
-            className="header-image"
-            onClick={() => navigateToHomeMainPage()}
-          >
-            <img src={logo} alt="" />
-          </div>
-          <div
-            className={`${
-              menuClass ? 'header-menu-toggle is-active' : 'header-menu-toggle'
-            }`}
-            id="header-mobile-menu"
-            onClick={() => toggleMenu()}
-          >
-            <span className="bar"></span>
-            <span className="bar"></span>
-            <span className="bar"></span>
-          </div>
-          <ul
-            className={`${
-              navClass ? 'header-nav header-mobile-nav' : 'header-nav'
-            }`}
-          >
-            {HEADER_LIST.map((data) => {
-              return (
+      {hideHeader && (
+        <div className="header-nav-wrapper">
+          <div className="header-bar"></div>
+          <div className="header-navbar">
+            <div className="header-image" onClick={() => navigateToMainPage()}>
+              <img src={logo} alt="" />
+            </div>
+            <div
+              className={`${
+                menuClass
+                  ? 'header-menu-toggle is-active'
+                  : 'header-menu-toggle'
+              }`}
+              id="header-mobile-menu"
+              onClick={() => toggleMenu()}
+            >
+              <span className="bar"></span>
+              <span className="bar"></span>
+              <span className="bar"></span>
+            </div>
+            <ul
+              className={`${
+                navClass ? 'header-nav header-mobile-nav' : 'header-nav'
+              }`}
+            >
+              {HEADER_LIST.map((data) => (
                 <li
                   key={data.id}
                   className={
@@ -136,31 +160,37 @@ const Header = (props) => {
                   &nbsp;
                   <span className="header-list-name">{data.name}</span>
                 </li>
-              );
-            })}
-            <input
-              className="search-input"
-              type="text"
-              placeholder="search for a movie"
-              value={search}
-              onChange={onSearchChange}
-            />
-          </ul>
+              ))}
+              <input
+                className={`search-input ${disableSearch ? 'disabled' : ''}`}
+                type="text"
+                placeholder="Search for a movie"
+                value={search}
+                onChange={onSearchChange}
+              />
+            </ul>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
 
-// Todo: the path prop is not needed anymore, any replaced by location.pathname
 Header.propTypes = {
   getMovies: PropTypes.func,
   setMovieType: PropTypes.func,
   searchQuery: PropTypes.func,
   searchResult: PropTypes.func,
+  clearMovieDetails: PropTypes.func,
   setResponsePageNumber: PropTypes.func,
   page: PropTypes.number,
-  totalPages: PropTypes.number
+  totalPages: PropTypes.number,
+  path: PropTypes.string,
+  url: PropTypes.string,
+  routesArray: PropTypes.array,
+  pathURL: PropTypes.func,
+  setError: PropTypes.func,
+  errors: PropTypes.object
 };
 
 const mapStateToProps = (state) => ({
@@ -173,5 +203,7 @@ export default connect(mapStateToProps, {
   setMovieType,
   setResponsePageNumber,
   searchQuery,
-  searchResult
+  searchResult,
+  clearMovieDetails,
+  pathURL
 })(Header);
