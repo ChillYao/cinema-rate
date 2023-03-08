@@ -119,8 +119,8 @@ const Overview = (props) => {
         <div className="overview-detail">
           <h6>Language(s)</h6>
           <p>
-            {details.spoken_languages.map((language) => (
-              <a href="!#" key={language.name}>
+            {details.spoken_languages.map((language, index) => (
+              <a href="!#" key={index}>
                 {language.name}
               </a>
             ))}
