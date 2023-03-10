@@ -1,3 +1,4 @@
+/* eslint-disable multiline-ternary */
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -12,6 +13,7 @@ import Media from './media/Media';
 import Reviews from './reviews/Reviews';
 import { movieDetails } from '../../../redux/actions/movie';
 import { IMAGE_URL } from '../../../services/movies.service';
+import Spinner from '../../spinner/Spinner';
 // TODO: import useLocation, delelte match, replace match.path and match.url with location.pathname
 
 const Details = (props) => {
@@ -29,7 +31,7 @@ const Details = (props) => {
 
   return (
     <>
-      {details && (
+      {details ? (
         <div className="movie-container">
           <div
             className="movie-bg"
@@ -82,6 +84,8 @@ const Details = (props) => {
             </div>
           </div>
         </div>
+      ) : (
+        <Spinner />
       )}
     </>
   );
