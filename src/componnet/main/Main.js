@@ -15,6 +15,7 @@ import SearchResult from '../content/seach-result/SearchResult';
 // import useLocation and replace match.url and match.path with location.pathname
 const Main = (props) => {
   const {
+    list,
     loadMoreMovies,
     page,
     totalPages,
@@ -22,17 +23,9 @@ const Main = (props) => {
     movieType,
     searchResult
   } = props;
-  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(page);
   const mainRef = useRef();
   const bottomLineRef = useRef();
-
-  useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-  }, []);
 
   useEffect(() => {
     setResponsePageNumber(currentPage, totalPages);
@@ -59,9 +52,7 @@ const Main = (props) => {
   return (
     <>
       <div className="main" ref={mainRef} onScroll={handleScroll}>
-        {loading ? (
-          <Spinner />
-        ) : (
+        {list ? (
           <>
             {searchResult && searchResult.length === 0 ? (
               <MainContent />
@@ -69,6 +60,8 @@ const Main = (props) => {
               <SearchResult />
             )}
           </>
+        ) : (
+          <Spinner />
         )}
         <div ref={bottomLineRef}></div>
       </div>
